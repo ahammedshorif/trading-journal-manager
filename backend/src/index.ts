@@ -14,6 +14,10 @@ app.get("/", (req: Request, res: Response) => {
   return res.send("It's working 🙌");
 });
 
+app.post("/trade",(req: Request, res: Response)=>{
+
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`)
 });
