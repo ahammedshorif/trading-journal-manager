@@ -3,9 +3,10 @@ import authMiddleware from "../middlewares/auth.middleware";
 
 const router = Router();
 
-router.post("/",authMiddleware,(req , res)=>{
+router.post("/login",authMiddleware,async(req , res)=>{
     res.json({
-        mag:"hello"
+        message: "Login success",
+        user: req.user
     })
  
 })
