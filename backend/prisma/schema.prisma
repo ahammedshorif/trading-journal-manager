@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+
+model User {
+  id        String   @id
+  email     String   @unique
+  name      String?
+  journals  Journal[]
+  createdAt DateTime @default(now())
+}
+
+model Journal {
+  id             String   @id @default(uuid())
+  name           String
+  initialBalance Float
+  currentBalance Float
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  trades         Trade[]
+  createdAt      DateTime @default(now())
+}
+
+model Trade {
+  id          String    @id @default(uuid())
+  journalId   String
+  journal     Journal   @relation(fields: [journalId], references: [id])
+
+  pair        String
+  quantity    Float
+  entryPrice  Float
+  exitPrice   Float
+  stopLoss    Float?
+  takeProfit  Float?
+
+  tradeType   TradeType
+  profitLoss  Float
+  riskReward  Float?
+
+  emotion     String?
+  reason      String?
+
+  tags        Tag[]     @relation("TradeTags")
+
+  createdAt   DateTime  @default(now())
+}
+
+model Tag {
+  id     String   @id @default(uuid())
+  name   String   @unique
+  trades Trade[] @relation("TradeTags")
+}
+
+enum TradeType {
+  BUY
+  SELL
+}
